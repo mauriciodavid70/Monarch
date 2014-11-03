@@ -1,0 +1,28 @@
+﻿@model Monarch.Models.IdentityViewModel
+
+@{
+    ViewBag.Title = "Client identity";
+}
+
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+
+<div style="padding-top:10px; padding-bottom:20px">
+
+    Principal Type: <strong>@Model.PrincipalType</strong>
+    <br />
+    Identity Type: <strong>@Model.IdentityType</strong>
+
+</div>
+
+<ul>
+    @foreach (var claim in Model.Claims)
+    {
+        <li>
+            <strong>@claim.Type</strong>:
+            <span>@claim.Value</span>
+        </li>
+    }
+</ul>
+
+
