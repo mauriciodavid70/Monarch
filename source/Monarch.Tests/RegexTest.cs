@@ -77,7 +77,6 @@ namespace Monarch.Tests
             Match("(abc)+", "abc123"); //short cut sintax of (abc)(abc)?
         }
 
-
         [TestMethod]
         public void Regex_Quantification_KleeneStar_Test()
         {
@@ -94,6 +93,55 @@ namespace Monarch.Tests
             Match("(abc)*", "abc123"); //1 repeat, length of 3
         }
 
+        [TestMethod]
+        public void Regex_Anchor_BeginningOfString_Test()
+        {
+            //\A matches only at the beginning of the string.
+            Match(@"\Aabc", "abc");
+            //\A does not match the pattern at the beginning of a line
+            Match(@"\Aabc", "\nabc");
+            
+            //^ same as /A
+            Match("^abc", "abc");
+            Match("^abc", "\nabc");
+        }
+
+        [TestMethod]
+        public void Regex_Anchor_EndOfString_Test()
+        {
+            //\Z matches the subject only at the end of the string
+            Match(@"abc\Z", "abc");
+            //\Z matches the subject even with \n at the end of the string
+            Match(@"abc\Z", "abc\n");
+            // \Z does not match \n not at the end of the string
+            Match(@"abc\Z", "abc\n123");
+            
+            //$ same as /Z
+            Match("abc$", "abc");
+            Match("abc$", "abc\n");
+            Match("abc$", "abc\n123");
+
+            //\z matches at only at the end of the string (strict)
+            Match(@"abc\z", "abc\n");
+        }
+
+        [TestMethod]
+        public void Regex_MultilineModifier_Test()
+        {
+            //(?m) multiline modifier, only applies to ^ and $, does NOT apply to \A \Z \z'
+
+            //(?m)^ matches the pattern at the beginning of string / line'
+            Match("(?m)^abc", "abc first line,\nabc second line");
+
+            //(?m) applies to all alternatives in the pattern'
+            Match(@"(?m)^abc|^123", "abc first line,\nabc second line\n123 third line");
+
+            //(?m:^) restricts the scope of ^'
+            Match("(?m:^abc)|^123", "abc first line,\nabc second line\n123 third line");
+
+            //(?m)$ matches the end of the string / line
+            Match("(?m)abc$", "first line abc\nsecond line abc");
+        }
        
 
 
@@ -116,8 +164,6 @@ namespace Monarch.Tests
             Console.WriteLine("\t" + match.Success);
 
             Console.WriteLine("========================================");
-
-
         }
 
 
